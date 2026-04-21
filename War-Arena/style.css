@@ -1,0 +1,659 @@
+/* ===== RESET & BASE ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Pixel-perfect rendering for all images */
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #0d0d1a;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, #1a0a3a 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.015) 2px,
+      rgba(255,255,255,0.015) 4px
+    );
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  color: #f9c74f;
+  text-shadow: 2px 2px 0 #7a4f00, 4px 4px 0 #3a2000;
+}
+
+/* ===== SELECTION SCREEN ===== */
+#selection-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 760px;
+  padding: 40px 20px;
+}
+
+#selection-screen h1 {
+  font-size: clamp(1.7rem, 6vw, 3rem);
+  letter-spacing: 6px;
+  color: #f9c74f;
+  text-shadow: 3px 3px 0 #7a4f00, 6px 6px 0 #3a2000, 0 0 30px rgba(249,199,79,0.4);
+  animation: title-pulse 2s ease-in-out infinite;
+}
+
+@keyframes title-pulse {
+  0%, 100% { text-shadow: 3px 3px 0 #7a4f00, 6px 6px 0 #3a2000, 0 0 20px rgba(249,199,79,0.3); }
+  50%       { text-shadow: 3px 3px 0 #7a4f00, 6px 6px 0 #3a2000, 0 0 40px rgba(249,199,79,0.7); }
+}
+
+#selection-screen h2 {
+  font-size: 1.25rem;
+  letter-spacing: 3px;
+}
+
+.selection-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.vs-badge {
+  font-size: 1.4rem;
+  color: #e63946;
+  text-shadow: 2px 2px 0 #7a0000;
+  padding: 8px 12px;
+  border: 3px solid #e63946;
+  background: #1b0010;
+  box-shadow: 0 0 16px rgba(230,57,70,0.5);
+  flex-shrink: 0;
+}
+
+.player-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.player-selection label {
+  font-size: 0.9rem;
+}
+
+/* Character preview box on selection screen */
+.char-preview {
+  width: 100%;
+  height: 100px;
+  background: #0a0a1a;
+  border: 3px solid #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.char-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.02) 3px,
+    rgba(255,255,255,0.02) 4px
+  );
+}
+
+.char-preview-sprite {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  background-size: auto 64px;
+  /* default: idle pose (frame 0 = left third of sprite sheet) */
+  background-position: 0 0;
+}
+
+.char-preview-sprite.warrior-sprite { background-image: url('assets/images/warrior.png'); }
+.char-preview-sprite.mage-sprite    { background-image: url('assets/images/mage.png'); }
+.char-preview-sprite.archer-sprite  { background-image: url('assets/images/archer.png'); }
+
+.char-preview-name {
+  font-size: 0.85rem;
+}
+
+select {
+  padding: 10px 14px;
+  font-size: 1rem;
+  background: #0d0d2a;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  image-rendering: pixelated;
+}
+
+select:focus {
+  border-color: #f9c74f;
+  box-shadow: 0 0 10px rgba(249,199,79,0.4);
+}
+
+.validation-message {
+  color: #e63946;
+  font-size: 0.9rem;
+  text-shadow: 1px 1px 0 #7a0000;
+}
+
+#start-btn {
+  padding: 14px 32px;
+  font-size: 1rem;
+  color: #1b1b2f;
+  border: none;
+  border-bottom: 5px solid #7a4f00;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transition: transform 0.1s, border-bottom-width 0.1s;
+  margin-top: 8px;
+  text-shadow: none;
+  image-rendering: pixelated;
+}
+
+#start-btn:hover {
+  background: #ffe066;
+  box-shadow: 0 0 20px rgba(249,199,79,0.6);
+}
+
+#start-btn:active {
+  transform: translateY(4px);
+  border-bottom-width: 1px;
+}
+
+/* ===== GAME SCREEN ===== */
+#game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 960px;
+}
+
+/* ===== TURN INDICATOR ===== */
+.turn-indicator {
+  font-size: 1rem;
+  background: #0d0d2a;
+  padding: 10px 28px;
+  border: 3px solid #f9c74f;
+  letter-spacing: 2px;
+  box-shadow: 0 0 16px rgba(249,199,79,0.3), inset 0 0 10px rgba(249,199,79,0.05);
+}
+
+.turn-indicator.winner {
+  color: #fff;
+  border-color: #e63946;
+  background: #1b0010;
+  box-shadow: 0 0 30px rgba(230,57,70,0.6);
+  animation: winner-flash 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes winner-flash {
+  from { box-shadow: 0 0 20px rgba(230,57,70,0.4); }
+  to   { box-shadow: 0 0 50px rgba(230,57,70,0.9); }
+}
+
+/* ===== ARENA / SPRITE STAGE ===== */
+.arena {
+  width: 100%;
+  background: #0a0a18;
+  border: 3px solid #333;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scanline overlay — covers the whole arena box */
+.arena::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.10) 3px,
+    rgba(0,0,0,0.10) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Ground line between sprite stage and panels */
+.sprite-stage {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 16px 40px 20px;
+  height: 140px;
+  position: relative;   /* ← positioning context for effects */
+  z-index: 1;
+  border-bottom: 3px dashed #222;
+  background: linear-gradient(180deg, #0d0d22 0%, #0a0a18 100%);
+  overflow: hidden;     /* ← clip effects to the stage */
+}
+
+/* Ground dots */
+.sprite-stage::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #2a2a4a 0px, #2a2a4a 8px, transparent 8px, transparent 14px);
+}
+
+.sprite-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Player 2 sprite faces left (mirrored) */
+.sprite-wrapper.flipped .sprite-display {
+  transform: scaleX(-1);
+}
+
+.sprite-display {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  background-size: auto 64px;
+  background-position: 0 0;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+}
+
+.sprite-display.warrior-sprite { background-image: url('assets/images/warrior.png'); }
+.sprite-display.mage-sprite    { background-image: url('assets/images/mage.png'); }
+.sprite-display.archer-sprite  { background-image: url('assets/images/archer.png'); }
+
+.sprite-display.pose-idle    { background-position: 0px 0; }
+.sprite-display.pose-attack  { background-position: -64px 0; }
+.sprite-display.pose-damaged { background-position: -128px 0; }
+
+.arena-divider { flex: 1; }
+
+/* ===== PLAYERS CONTAINER — inside the arena box ===== */
+.players-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== PLAYER PANEL — sits inside the arena box ===== */
+.player-panel {
+  background: #0d0d2a;
+  border-top: none;
+  border-right: 3px solid #222;
+  padding: 16px 14px;
+  flex: 1 1 0;
+  min-width: 0;
+  box-shadow: inset 0 0 20px rgba(0,0,50,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s;
+  position: relative;
+}
+
+/* Divider between the two panels */
+#player1-panel {
+  border-right: 3px solid #333;
+}
+#player2-panel {
+  border-right: none;
+}
+
+/* Corner decorations */
+.player-panel::before,
+.player-panel::after {
+  content: '◆';
+  position: absolute;
+  color: #f9c74f;
+  font-size: 0.5rem;
+  opacity: 0.4;
+}
+.player-panel::before { top: 6px; left: 8px; }
+.player-panel::after  { top: 6px; right: 8px; }
+
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player-name {
+  font-size: 1rem;
+}
+
+.player-class {
+  font-size: 0.85rem;
+  font-style: normal;
+  letter-spacing: 2px;
+}
+
+/* ===== HEALTH BAR ===== */
+.health-bar-container {
+  width: 100%;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #333;
+}
+
+/* The pixel-art health bar image as background texture */
+.health-bar-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.health-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, #80ff80 0%, #32cd32 40%, #228b22 100%);
+  transition: width 0.4s ease, background 0.4s ease;
+  position: relative;
+  z-index: 1;
+  image-rendering: pixelated;
+}
+
+/* Health bar color shifts as HP drops */
+.health-bar.medium {
+  background: linear-gradient(180deg, #ffe066 0%, #f9c74f 40%, #b8860b 100%);
+}
+.health-bar.low {
+  background: linear-gradient(180deg, #ff8080 0%, #e63946 40%, #8b0000 100%);
+  animation: hp-pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes hp-pulse {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.4); }
+}
+
+.health-text {
+  font-size: 0.85rem;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  flex: 1 1 auto;
+  padding: 10px 6px;
+  font-size: 0.9rem;
+  border: none;
+  border-bottom: 4px solid rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition: transform 0.1s, border-bottom-width 0.1s, opacity 0.2s;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn-icon {
+  font-size: 0.8rem;
+}
+
+.btn-special-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+  vertical-align: middle;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  border-bottom-width: 1px;
+}
+
+.btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-attack {
+  background: #c0392b;
+  color: #fff;
+  border-bottom-color: #7a0000;
+  box-shadow: 0 0 8px rgba(192,57,43,0.4);
+}
+
+.btn-heal {
+  background: #27ae60;
+  color: #fff;
+  border-bottom-color: #0a5c2a;
+  box-shadow: 0 0 8px rgba(39,174,96,0.4);
+}
+
+.btn-special {
+  background: #d4ac0d;
+  color: #1b1b2f;
+  border-bottom-color: #7a5f00;
+  box-shadow: 0 0 8px rgba(212,172,13,0.4);
+}
+
+/* ===== GAME LOG ===== */
+.game-log-container {
+  width: 100%;
+  max-width: 960px;
+  background: #0a0a18;
+  border: 3px solid #222;
+  padding: 14px 18px;
+}
+
+.game-log-container h3 {
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 0 #7a4f00;
+}
+
+.game-log {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  padding-right: 4px;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+}
+
+.game-log::-webkit-scrollbar { width: 6px; }
+.game-log::-webkit-scrollbar-track { background: #0d0d1a; }
+.game-log::-webkit-scrollbar-thumb { background: #333; }
+
+.game-log p {
+  margin: 0;
+  padding: 3px 0;
+  border-bottom: 1px solid #1a1a30;
+}
+
+/* Log entry color coding */
+.game-log p.log-attack  { color: #ff8080; }
+.game-log p.log-heal    { color: #80ff80; }
+.game-log p.log-special { color: #ffe066; }
+
+/* ===== ANIMATIONS ===== */
+
+/* Warrior power strike */
+@keyframes power-strike {
+  0%   { transform: translateX(0); }
+  35%  { transform: translateX(40px); }
+  65%  { transform: translateX(40px); }
+  100% { transform: translateX(0); }
+}
+
+.power-strike { animation: power-strike 0.6s ease-in-out; }
+
+#player2-panel.power-strike { animation: power-strike-reverse 0.6s ease-in-out; }
+
+@keyframes power-strike-reverse {
+  0%   { transform: translateX(0); }
+  35%  { transform: translateX(-40px); }
+  65%  { transform: translateX(-40px); }
+  100% { transform: translateX(0); }
+}
+
+/* ── All effects are position:absolute inside .sprite-stage ── */
+
+/* Mage fireball */
+@keyframes fireball-fly {
+  0%   { transform: translateX(0)    scaleX(1);  opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(500px) scaleX(1); opacity: 0; }
+}
+@keyframes fireball-fly-reverse {
+  0%   { transform: translateX(0)     scaleX(-1); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(-500px) scaleX(-1); opacity: 0; }
+}
+
+.fireball {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background-image: url('assets/images/magic-attack.png');
+  background-size: auto 32px;
+  background-position: -64px 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 20;
+  animation: fireball-fly 0.7s ease-in forwards;
+  filter: drop-shadow(0 0 8px rgba(180,100,255,0.9));
+}
+.fireball.reverse {
+  animation: fireball-fly-reverse 0.7s ease-in forwards;
+}
+
+/* Archer arrow */
+@keyframes arrow-fly {
+  0%   { transform: translateX(0);    opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(500px); opacity: 0; }
+}
+@keyframes arrow-fly-reverse {
+  0%   { transform: translateX(0)     scaleX(-1); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(-500px) scaleX(-1); opacity: 0; }
+}
+
+.arrow {
+  position: absolute;
+  width: 32px;
+  height: 16px;
+  background-image: url('assets/images/arrow.png');
+  background-size: auto 16px;
+  background-position: 0 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 20;
+  animation: arrow-fly 0.6s linear forwards;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
+}
+.arrow.reverse {
+  animation: arrow-fly-reverse 0.6s linear forwards;
+}
+
+/* Warrior sword slash */
+@keyframes slash-anim {
+  0%   { opacity: 1; background-position: 0 0; }
+  50%  { background-position: -96px 0; }
+  100% { opacity: 0; background-position: -192px 0; }
+}
+
+.sword-slash {
+  position: absolute;
+  width: 96px;
+  height: 64px;
+  background-image: url('assets/images/sword-slash.png');
+  background-size: auto 64px;
+  background-position: 0 0;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 20;
+  animation: slash-anim 0.4s steps(3) forwards;
+  filter: drop-shadow(0 0 6px rgba(255,220,50,0.9));
+}
+
+/* Sprite shake on damage */
+@keyframes sprite-shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-4px); }
+  80%     { transform: translateX(4px); }
+}
+
+.sprite-shake { animation: sprite-shake 0.4s ease-in-out; }
+
+/* Flipped wrapper shake goes opposite */
+.flipped .sprite-shake {
+  animation: sprite-shake-flip 0.4s ease-in-out;
+}
+
+@keyframes sprite-shake-flip {
+  0%,100% { transform: scaleX(-1) translateX(0); }
+  20%     { transform: scaleX(-1) translateX(-6px); }
+  40%     { transform: scaleX(-1) translateX(6px); }
+  60%     { transform: scaleX(-1) translateX(-4px); }
+  80%     { transform: scaleX(-1) translateX(4px); }
+}

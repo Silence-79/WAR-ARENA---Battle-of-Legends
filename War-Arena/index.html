@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WAR ARENA – Battle of Legends</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== CHARACTER SELECTION SCREEN ===== -->
+  <section id="selection-screen">
+    <h1>WAR ARENA</h1>
+    <h2>Battle of Legends</h2>
+
+    <div class="selection-container">
+      <div class="player-selection">
+        <label for="player1-select">Player 1 — Choose your character</label>
+        <!-- Preview sprite shown when player picks a character -->
+        <div class="char-preview" id="player1-preview">
+          <div class="char-preview-sprite" id="player1-preview-sprite"></div>
+          <span class="char-preview-name" id="player1-preview-name">?</span>
+        </div>
+        <select id="player1-select">
+          <option value="">-- Select --</option>
+          <option value="Warrior">⚔️ Warrior</option>
+          <option value="Mage">🔮 Mage</option>
+          <option value="Archer">🏹 Archer</option>
+        </select>
+      </div>
+
+      <div class="vs-badge">VS</div>
+
+      <div class="player-selection">
+        <label for="player2-select">Player 2 — Choose your character</label>
+        <div class="char-preview" id="player2-preview">
+          <div class="char-preview-sprite" id="player2-preview-sprite"></div>
+          <span class="char-preview-name" id="player2-preview-name">?</span>
+        </div>
+        <select id="player2-select">
+          <option value="">-- Select --</option>
+          <option value="Warrior">⚔️ Warrior</option>
+          <option value="Mage">🔮 Mage</option>
+          <option value="Archer">🏹 Archer</option>
+        </select>
+      </div>
+    </div>
+
+    <p id="validation-message" class="validation-message" aria-live="polite"></p>
+    <button id="start-btn">⚔ START BATTLE ⚔</button>
+  </section>
+
+  <!-- ===== GAME SCREEN (hidden initially) ===== -->
+  <section id="game-screen" hidden>
+
+    <div id="turn-indicator" class="turn-indicator" aria-live="polite">Player 1's Turn</div>
+
+    <!-- ===== UNIFIED FIGHTING BOX ===== -->
+    <div class="arena">
+
+      <!-- Top row: sprite stage -->
+      <div class="sprite-stage">
+        <div class="sprite-wrapper" id="sprite1-wrapper">
+          <div class="sprite-display" id="player1-sprite"></div>
+        </div>
+        <div class="arena-divider"></div>
+        <div class="sprite-wrapper flipped" id="sprite2-wrapper">
+          <div class="sprite-display" id="player2-sprite"></div>
+        </div>
+      </div>
+
+      <!-- Bottom row: both player panels inside the arena box -->
+      <div class="players-container">
+
+        <!-- Player 1 Panel -->
+        <div class="player-panel" id="player1-panel">
+          <div class="panel-header">
+            <h2 id="player1-name" class="player-name">Player 1</h2>
+            <p id="player1-class" class="player-class"></p>
+          </div>
+
+          <div class="health-bar-container">
+            <img src="assets/images/health-bar.png" class="health-bar-bg" alt="" aria-hidden="true" />
+            <div class="health-bar" id="player1-health-bar"
+                 role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"></div>
+          </div>
+          <p class="health-text">HP: <span id="player1-health-text">100</span></p>
+
+          <div class="action-buttons">
+            <button id="player1-attack-btn" class="btn btn-attack">
+              <span class="btn-icon">⚔</span> Attack
+            </button>
+            <button id="player1-heal-btn" class="btn btn-heal">
+              <span class="btn-icon">💚</span> Heal
+            </button>
+            <button id="player1-special-btn" class="btn btn-special">
+              <img src="assets/images/special-icon.png" class="btn-special-icon" alt="" aria-hidden="true" />
+              Special
+            </button>
+          </div>
+        </div>
+
+        <!-- Player 2 Panel -->
+        <div class="player-panel" id="player2-panel">
+          <div class="panel-header">
+            <h2 id="player2-name" class="player-name">Player 2</h2>
+            <p id="player2-class" class="player-class"></p>
+          </div>
+
+          <div class="health-bar-container">
+            <img src="assets/images/health-bar.png" class="health-bar-bg" alt="" aria-hidden="true" />
+            <div class="health-bar" id="player2-health-bar"
+                 role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"></div>
+          </div>
+          <p class="health-text">HP: <span id="player2-health-text">100</span></p>
+
+          <div class="action-buttons">
+            <button id="player2-attack-btn" class="btn btn-attack">
+              <span class="btn-icon">⚔</span> Attack
+            </button>
+            <button id="player2-heal-btn" class="btn btn-heal">
+              <span class="btn-icon">💚</span> Heal
+            </button>
+            <button id="player2-special-btn" class="btn btn-special">
+              <img src="assets/images/special-icon.png" class="btn-special-icon" alt="" aria-hidden="true" />
+              Special
+            </button>
+          </div>
+        </div>
+
+      </div><!-- end .players-container -->
+    </div><!-- end .arena -->
+
+    <!-- Game Log -->
+    <div class="game-log-container">
+      <h3>⚔ Battle Log</h3>
+      <div id="game-log" class="game-log" aria-live="polite" aria-label="Game log"></div>
+    </div>
+
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/sprites.js"></script>
+</body>
+</html>
