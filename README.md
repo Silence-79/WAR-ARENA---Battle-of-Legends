@@ -24,7 +24,7 @@ Players take turns to attack, heal, or use special ability until one player wins
 
 ## ▶️ How to Run
 
-{LINK SOON}
+{ https://wararenabol.vercel.app }
 
 ## 📌 Features
 
